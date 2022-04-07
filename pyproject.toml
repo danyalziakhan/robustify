@@ -1,0 +1,55 @@
+[tool.black]
+line-length = 88
+target_version = ['py310']
+include = '\.py$'
+
+[tool.isort]
+profile = "black"
+multi_line_output = 3
+include_trailing_comma = true
+skip_glob = ".venv, */build, */.git"
+float_to_top = true
+known_first_party = "build"
+skip = []
+lines_between_types = 1
+lines_after_imports = 2
+
+[tool.poetry]
+name = "robustify"
+version = "0.1.0"
+description = ""
+authors = ["Danyal Zia <danyal6870@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = ">=3.9,<3.11"
+colorama = "^0.4.4"
+
+[tool.poetry.dev-dependencies]
+black = "^22.3.0"
+ipython = "^8.2.0"
+ipykernel = "^6.10.0"
+isort = "^5.10.1"
+pre-commit = "^2.18.1"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.pyright]
+include = ["."]
+exclude = ["**/node_modules", "**/__pycache__", "**/.venv"]
+venv = ".venv"
+stubPath = "stubs"
+
+reportMissingImports = true
+reportMissingTypeStubs = false
+reportUnknownParameterType = "warning"
+reportUnknownMemberType = false
+reportUnknownVariableType = "warning"
+reportUnknownArgumentType = true
+reportPrivateUsage = true
+reportUntypedFunctionDecorator = false
+reportImportCycles = true
+reportUnusedImport = "warning"
+reportUnknownLambdaType = false
