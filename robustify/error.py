@@ -41,5 +41,6 @@ class BasicError(Exception):
             else (Fore.RED + str(self.message) + Fore.RESET)
         )
 
+
 class MaxTriesReached(BasicError):
     pass
