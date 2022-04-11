@@ -9,7 +9,6 @@
 
 from __future__ import annotations
 
-# ? Adapted from Expression library: https://github.com/cognitedata/Expression/tree/main/expression/core
 import asyncio
 
 from functools import cache
