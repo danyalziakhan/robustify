@@ -1,3 +1,4 @@
+from robustify.error import MaxTriesReached
 from robustify.functional import do, isin
 from robustify.result import (
     Err,
@@ -23,4 +24,5 @@ __all__ = [
     "assert_never",
     "do",
     "isin",
+    "MaxTriesReached",
 ]
