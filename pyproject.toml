@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "robustify"
-version = "0.1.2"
+version = "0.1.0"
 description = "Utility tools to make the code Robust"
 authors = ["Danyal Zia Khan <danyal6870@gmail.com>"]
 license = "MIT License"
