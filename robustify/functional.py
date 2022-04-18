@@ -43,14 +43,19 @@ def do(  # type: ignore
     action: Callable[ParamsType, Awaitable[ReturnType]]
     | Callable[ParamsType, ReturnType],
 ):
-    if asyncio.iscoroutine(awaitable := action()):
+    """
+    Create an instance of `DoSync` or `DoAsync` depending on the argument passed
+    """
+    if asyncio.iscoroutine(awaitable := action()):  # type: ignore
         return DoAsync(awaitable, action)  # type: ignore
 
-    result = action()
+    result = action()  # type: ignore
     return DoSync(result, action)
 
 
 class DoAsync(Generic[ParamsType, ReturnType]):
+    __slots__ = ("result", "action")
+
     def __init__(
         self,
         result: ReturnType,
@@ -60,7 +65,7 @@ class DoAsync(Generic[ParamsType, ReturnType]):
         self.action = action
 
     @overload
-    async def retryif(
+    async def retry_if(
         self,
         predicate: Callable[[ReturnType], bool],
         *,
@@ -70,7 +75,7 @@ class DoAsync(Generic[ParamsType, ReturnType]):
         ...
 
     @overload
-    async def retryif(
+    async def retry_if(
         self,
         predicate: Callable[[ReturnType], bool],
         *,
@@ -79,7 +84,7 @@ class DoAsync(Generic[ParamsType, ReturnType]):
     ) -> Result[ReturnType, MaxTriesReached]:
         ...
 
-    async def retryif(
+    async def retry_if(
         self,
         predicate: Callable[[ReturnType], bool],
         *,
@@ -100,20 +105,24 @@ class DoAsync(Generic[ParamsType, ReturnType]):
             ):  # ? If it isn't awaitable, then we don't need to call it again as on_retry() is already called here
                 await coro
 
-            self.result = await self.action()
+            self.result = await self.action()  # type: ignore
 
         else:
             return Err(
-                MaxTriesReached(f"Max tries ({max_tries}) reached for retryif()")
+                MaxTriesReached(
+                    f"Max tries ({max_tries}) reached on predicate {predicate}"
+                )
             )
 
         return Ok(self.result)
 
     # ? Alias
-    retry_if = retryif
+    retryif = retry_if
 
 
 class DoSync(Generic[ParamsType, ReturnType]):
+    __slots__ = ("result", "action")
+
     def __init__(
         self,
         result: ReturnType,
@@ -122,7 +131,7 @@ class DoSync(Generic[ParamsType, ReturnType]):
         self.result = result
         self.action = action
 
-    def retryif(
+    def retry_if(
         self,
         predicate: Callable[[ReturnType], bool],
         *,
@@ -134,20 +143,26 @@ class DoSync(Generic[ParamsType, ReturnType]):
                 break
 
             on_retry()
-            self.result = self.action()
+            self.result = self.action()  # type: ignore
 
         else:
             return Err(
-                MaxTriesReached(f"Max tries ({max_tries}) reached for retryif()")
+                MaxTriesReached(
+                    f"Max tries ({max_tries}) reached on predicate {predicate}"
+                )
             )
 
         return Ok(self.result)
 
     # ? Alias
-    retry_if = retryif
+    retryif = retry_if
 
 
 def isin(value: T) -> Callable[[Iterable[T]], bool]:
+    """
+    Returns predicate for checking if the value is present in an iterator
+    """
+
     @cache
     def _isin(iterator: Iterable[T]):
         return value in iterator

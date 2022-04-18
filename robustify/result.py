@@ -247,6 +247,8 @@ def returns_future(
 
     Regular return values are turned into ``Ok(return_value)``. Raised
     exceptions of the specified exception type(s) are turned into ``Err(exc)``.
+
+    Similar to @returns but for async functions
     """
     if not exceptions or not all(
         inspect.isclass(exception) and issubclass(exception, BaseException)
@@ -275,17 +277,22 @@ def returns_future(
     return decorator
 
 
-def is_ok(fn: Result[ReturnType, E]) -> TypeGuard[ReturnType]:
-    return isinstance(fn, Ok)
+def is_ok(val: Result[ReturnType, E]) -> TypeGuard[ReturnType]:
+    """
+    Shorthand for isinstance(val, Ok)
+    """
+    return isinstance(val, Ok)
 
 
-def is_err(fn: Result[ReturnType, E]) -> TypeGuard[ReturnType]:
-    return isinstance(fn, Err)
-
-
-def raise_exception(exception: type[TBE]) -> NoReturn:
-    raise exception
+def is_err(val: Result[ReturnType, E]) -> TypeGuard[ReturnType]:
+    """
+    Shorthand for isinstance(val, Err)
+    """
+    return isinstance(val, Err)
 
 
 def assert_never(__arg: Never) -> Never:
+    """
+    When using structural pattern matching, exhaustively check the type in last case statement
+    """
     raise AssertionError("Expected code to be unreachable")
