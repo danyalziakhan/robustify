@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "robustify"
-version = "0.1.0"
+version = "0.1.3"
 description = "Utility tools to make the code Robust"
 authors = ["Danyal Zia Khan <danyal6870@gmail.com>"]
 license = "MIT License"
@@ -18,7 +18,7 @@ classifiers = [
 ]
 
 [tool.poetry.dependencies]
-python = ">=3.9,<3.11"
+python = ">=3.10,<3.11"
 colorama = "^0.4.4"
 
 [tool.poetry.dev-dependencies]
