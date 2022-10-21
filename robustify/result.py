@@ -100,9 +100,6 @@ class Ok(Generic[T]):
     def unwrap_or(self, _default: U) -> T:  # type: ignore
         return self._value
 
-    def unwrap_or_else(self, op: Callable[[E], T]) -> T:  # type: ignore
-        return self._value
-
 
 class Err(Generic[E]):
     """
@@ -163,9 +160,6 @@ class Err(Generic[E]):
 
     def unwrap_or(self, default: U) -> U:
         return default
-
-    def unwrap_or_else(self, op: Callable[[E], T]) -> T:
-        return op(self._value)
 
 
 # ? A simple `Result` type inspired by Rust.
