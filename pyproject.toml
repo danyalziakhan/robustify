@@ -20,12 +20,12 @@ classifiers = [
 
 [tool.poetry.dependencies]
 python = ">=3.10,<3.12"
-colorama = "^0.4.5"
+colorama = "^0.4.6"
 
 [tool.poetry.group.dev.dependencies]
-black = "^22.8.0"
-ipykernel = "^6.15.3"
-ipython = "^8.5.0"
+black = "^22.10.0"
+ipykernel = "^6.17.1"
+ipython = "^8.6.0"
 isort = "^5.10.1"
 pre-commit = "^2.20.0"
 
