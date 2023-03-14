@@ -46,7 +46,6 @@ float_to_top = true
 include = ["."]
 exclude = ["**/node_modules", "**/__pycache__", "**/.venv"]
 venv = ".venv"
-stubPath = "stubs"
 
 reportMissingImports = true
 reportMissingTypeStubs = false
