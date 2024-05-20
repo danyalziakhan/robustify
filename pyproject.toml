@@ -14,20 +14,21 @@ classifiers = [
     "Programming Language :: Python :: 3",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
     "Programming Language :: Python :: Implementation :: CPython",
     "Topic :: Software Development :: Libraries :: Python Modules",
 ]
 
 [tool.poetry.dependencies]
-python = ">=3.10,<3.12"
+python = ">=3.10,<3.13"
 colorama = "^0.4.6"
 
 [tool.poetry.group.dev.dependencies]
-black = "^23.1.0"
-ipykernel = "^6.21.1"
-ipython = "^8.9.0"
-isort = "^5.12.0"
-pre-commit = "^3.0.4"
+black = "^24.4.2"
+ipykernel = "^6.29.4"
+ipython = "^8.24.0"
+isort = "^5.13.2"
+pre-commit = "^3.7.1"
 
 [tool.black]
 line-length = 88
