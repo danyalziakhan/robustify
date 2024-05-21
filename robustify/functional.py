@@ -25,7 +25,7 @@ from __future__ import annotations
 import asyncio
 from collections.abc import Awaitable
 from functools import cache
-from typing import TYPE_CHECKING, Generic, ParamSpec, TypeVar, overload
+from typing import TYPE_CHECKING, overload
 
 from robustify.error import MaxTriesReached
 from robustify.result import Err, Ok
@@ -35,41 +35,41 @@ if TYPE_CHECKING:
 
     from robustify.result import Result
 
-    T = TypeVar("T")
-
-ParamsType = ParamSpec("ParamsType")
-ReturnType = TypeVar("ReturnType")
-
 
 @overload
-def do(  # type: ignore
+def do[
+    ReturnType, **ParamsType
+](
     action: Callable[ParamsType, Awaitable[ReturnType]],
-) -> DoAsync[ParamsType, ReturnType]:
-    ...
+) -> DoAsync[
+    ParamsType, ReturnType
+]: ...
 
 
 @overload
-def do(
-    action: Callable[ParamsType, ReturnType],
-) -> DoSync[ParamsType, ReturnType]:
-    ...
+def do[
+    ReturnType, **ParamsType
+](action: Callable[ParamsType, ReturnType],) -> DoSync[ParamsType, ReturnType]: ...
 
 
-def do(  # type: ignore
-    action: Callable[ParamsType, Awaitable[ReturnType]]
-    | Callable[ParamsType, ReturnType],
+def do[
+    ReturnType, **ParamsType
+](
+    action: (
+        Callable[ParamsType, Awaitable[ReturnType]] | Callable[ParamsType, ReturnType]
+    ),
 ):
     """
     Create an instance of `DoSync` or `DoAsync` depending on the argument passed
     """
-    if asyncio.iscoroutine(awaitable := action()):  # type: ignore
-        return DoAsync(awaitable, action)  # type: ignore
+    if asyncio.iscoroutine(awaitable := action()):
+        return DoAsync(awaitable, action)
 
-    result = action()  # type: ignore
+    result = action()
     return DoSync(result, action)
 
 
-class DoAsync(Generic[ParamsType, ReturnType]):
+class DoAsync[**ParamsType, ReturnType]:
     __slots__ = ("result", "action")
 
     def __init__(
@@ -87,8 +87,7 @@ class DoAsync(Generic[ParamsType, ReturnType]):
         *,
         on_retry: Callable[..., Awaitable[None]],
         max_tries: int,
-    ) -> Result[ReturnType, MaxTriesReached]:
-        ...
+    ) -> Result[ReturnType, MaxTriesReached]: ...
 
     @overload
     async def retry_if(
@@ -97,10 +96,9 @@ class DoAsync(Generic[ParamsType, ReturnType]):
         *,
         on_retry: Callable[..., None],
         max_tries: int,
-    ) -> Result[ReturnType, MaxTriesReached]:
-        ...
+    ) -> Result[ReturnType, MaxTriesReached]: ...
 
-    async def retry_if(
+    async def retry_if(  # type: ignore
         self,
         predicate: Callable[[ReturnType], bool],
         *,
@@ -130,13 +128,13 @@ class DoAsync(Generic[ParamsType, ReturnType]):
                 )
             )
 
-        return Ok(self.result)
+        return Ok(self.result)  # type: ignore
 
     # ? Alias
     retryif = retry_if
 
 
-class DoSync(Generic[ParamsType, ReturnType]):
+class DoSync[**ParamsType, ReturnType]:
     __slots__ = ("result", "action")
 
     def __init__(
@@ -174,7 +172,7 @@ class DoSync(Generic[ParamsType, ReturnType]):
     retryif = retry_if
 
 
-def isin(value: T) -> Callable[[Iterable[T]], bool]:
+def isin[T](value: T) -> Callable[[Iterable[T]], bool]:
     """
     Returns predicate for checking if the value is present in an iterator
     """

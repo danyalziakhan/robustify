@@ -24,17 +24,11 @@ from __future__ import annotations
 
 import functools
 import inspect
-from typing import TYPE_CHECKING, Any, Generic, TypeVar, cast
+from typing import TYPE_CHECKING, Any, cast
 
 if TYPE_CHECKING:
     from collections.abc import Awaitable, Callable
-    from typing import TYPE_CHECKING, Final, NoReturn, ParamSpec, TypeGuard
-
-    U = TypeVar("U")
-    TBE = TypeVar("TBE", bound=BaseException)
-
-    ParamsType = ParamSpec("ParamsType")
-    ReturnType = TypeVar("ReturnType")
+    from typing import TYPE_CHECKING, Final, NoReturn, TypeGuard
 
 # ? An error-handling model influenced by that used by the Rust programming language
 # ? See: https://doc.rust-lang.org/book/ch09-00-error-handling.html
@@ -42,11 +36,8 @@ if TYPE_CHECKING:
 # ? Adapted from Black's rusty.py implementation: https://github.com/psf/black/blob/main/src/black/rusty.py
 # ? I also took some method implementation from result.py: https://github.com/rustedpy/result
 
-T = TypeVar("T", covariant=True)  # Success type
-E = TypeVar("E", covariant=True)  # Error type
 
-
-class Ok(Generic[T]):
+class Ok[T]:
     """
     A value that indicates success and which stores arbitrary data for the return value.
     """
@@ -103,11 +94,11 @@ class Ok(Generic[T]):
     def unwrap_err(self) -> NoReturn:
         raise UnwrapError(self, f"Called `Result.unwrap_err()` on an `Ok`: {self}")
 
-    def unwrap_or(self, _default: U) -> T:  # type: ignore
+    def unwrap_or[U](self, _default: U) -> T:
         return self._value
 
 
-class Err(Generic[E]):
+class Err[E]:
     """
     A value that signifies failure and which stores arbitrary data for the error.
     """
@@ -164,13 +155,13 @@ class Err(Generic[E]):
     def unwrap_err(self) -> E:
         return self._value
 
-    def unwrap_or(self, default: U) -> U:
+    def unwrap_or[U](self, default: U) -> U:
         return default
 
 
 # ? A simple `Result` type inspired by Rust.
 # ? See:  (https://doc.rust-lang.org/std/result/enum.Result.html)
-Result = Ok[T] | Err[E]
+type Result[OkType, ErrType] = Ok[OkType] | Err[ErrType]
 
 
 class UnwrapError(Exception):
@@ -198,7 +189,9 @@ class UnwrapError(Exception):
         return self._result
 
 
-def returns(
+def returns[
+    TBE: BaseException, **ParamsType, ReturnType
+](
     *exceptions: type[TBE],
 ) -> Callable[
     [Callable[ParamsType, ReturnType]], Callable[ParamsType, Result[ReturnType, TBE]]
@@ -236,9 +229,9 @@ def returns(
     return decorator
 
 
-def returns_future(
-    *exceptions: type[TBE],
-) -> Callable[
+def returns_future[
+    TBE: BaseException, **ParamsType, ReturnType
+](*exceptions: type[TBE],) -> Callable[
     [Callable[ParamsType, Awaitable[ReturnType]]],
     Callable[ParamsType, Awaitable[Result[ReturnType, TBE]]],
 ]:
@@ -277,14 +270,14 @@ def returns_future(
     return decorator
 
 
-def is_ok(val: Result[ReturnType, E]) -> TypeGuard[ReturnType]:
+def is_ok[OkType, ErrType](val: Result[OkType, ErrType]) -> TypeGuard[OkType]:
     """
     Shorthand for isinstance(val, Ok)
     """
     return isinstance(val, Ok)
 
 
-def is_err(val: Result[ReturnType, E]) -> TypeGuard[ReturnType]:
+def is_err[OkType, ErrType](val: Result[OkType, ErrType]) -> TypeGuard[ErrType]:
     """
     Shorthand for isinstance(val, Err)
     """
