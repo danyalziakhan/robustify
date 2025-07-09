@@ -1,8 +1,8 @@
 [project]
 name = "robustify"
-version = "0.1.4"
+version = "0.1.5"
 description = "Utility tools to make the code Robust"
-authors = [{ name = "Danyal Zia Khan", email = "danyal6870@gmail.com" }]
+authors = [{ name = "Danyal Zia Khan", email = "danyalziakhan@gmail.com" }]
 requires-python = ">=3.10,<3.14"
 readme = "README.md"
 license = "MIT"

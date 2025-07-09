@@ -1,6 +1,6 @@
 # MIT License
 
-# Copyright (c) 2022 Danyal Zia Khan
+# Copyright (c) 2022-2025 Danyal Zia Khan
 
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -37,24 +37,18 @@ if TYPE_CHECKING:
 
 
 @overload
-def do[
-    ReturnType, **ParamsType
-](
+def do[ReturnType, **ParamsType](
     action: Callable[ParamsType, Awaitable[ReturnType]],
-) -> DoAsync[
-    ParamsType, ReturnType
-]: ...
+) -> DoAsync[ParamsType, ReturnType]: ...
 
 
 @overload
-def do[
-    ReturnType, **ParamsType
-](action: Callable[ParamsType, ReturnType],) -> DoSync[ParamsType, ReturnType]: ...
+def do[ReturnType, **ParamsType](
+    action: Callable[ParamsType, ReturnType],
+) -> DoSync[ParamsType, ReturnType]: ...
 
 
-def do[
-    ReturnType, **ParamsType
-](
+def do[ReturnType, **ParamsType](
     action: (
         Callable[ParamsType, Awaitable[ReturnType]] | Callable[ParamsType, ReturnType]
     ),

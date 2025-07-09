@@ -635,7 +635,7 @@ wheels = [
 
 [[package]]
 name = "robustify"
-version = "0.1.4"
+version = "0.1.5"
 source = { editable = "." }
 dependencies = [
     { name = "colorama" },

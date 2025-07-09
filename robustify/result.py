@@ -1,6 +1,6 @@
 # MIT License
 
-# Copyright (c) 2022 Danyal Zia Khan
+# Copyright (c) 2022-2025 Danyal Zia Khan
 
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -189,9 +189,7 @@ class UnwrapError(Exception):
         return self._result
 
 
-def returns[
-    TBE: BaseException, **ParamsType, ReturnType
-](
+def returns[TBE: BaseException, **ParamsType, ReturnType](
     *exceptions: type[TBE],
 ) -> Callable[
     [Callable[ParamsType, ReturnType]], Callable[ParamsType, Result[ReturnType, TBE]]
@@ -209,7 +207,7 @@ def returns[
         raise TypeError("as_result() requires one or more exception types")
 
     def decorator(
-        fn: Callable[ParamsType, ReturnType]
+        fn: Callable[ParamsType, ReturnType],
     ) -> Callable[ParamsType, Result[ReturnType, TBE]]:
         """
         Decorator to turn a function into one that returns a ``Result``.
@@ -229,9 +227,9 @@ def returns[
     return decorator
 
 
-def returns_future[
-    TBE: BaseException, **ParamsType, ReturnType
-](*exceptions: type[TBE],) -> Callable[
+def returns_future[TBE: BaseException, **ParamsType, ReturnType](
+    *exceptions: type[TBE],
+) -> Callable[
     [Callable[ParamsType, Awaitable[ReturnType]]],
     Callable[ParamsType, Awaitable[Result[ReturnType, TBE]]],
 ]:
@@ -250,7 +248,7 @@ def returns_future[
         raise TypeError("as_result_future() requires one or more exception types")
 
     def decorator(
-        fn: Callable[ParamsType, Awaitable[ReturnType]]
+        fn: Callable[ParamsType, Awaitable[ReturnType]],
     ) -> Callable[ParamsType, Awaitable[Result[ReturnType, TBE]]]:
         """
         Decorator to turn a function into one that returns a ``Result``.
