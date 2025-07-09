@@ -3,7 +3,7 @@ name = "robustify"
 version = "0.1.4"
 description = "Utility tools to make the code Robust"
 authors = [{ name = "Danyal Zia Khan", email = "danyal6870@gmail.com" }]
-requires-python = ">=3.10,<3.13"
+requires-python = ">=3.10,<3.14"
 readme = "README.md"
 license = "MIT"
 classifiers = [
@@ -16,6 +16,7 @@ classifiers = [
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
     "Programming Language :: Python :: Implementation :: CPython",
     "Topic :: Software Development :: Libraries :: Python Modules",
 ]
